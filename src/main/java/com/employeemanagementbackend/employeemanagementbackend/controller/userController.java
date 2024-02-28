@@ -1,5 +1,6 @@
 package com.employeemanagementbackend.employeemanagementbackend.controller;
 
+import com.employeemanagementbackend.employeemanagementbackend.exception.UserNotFoundException;
 import com.employeemanagementbackend.employeemanagementbackend.model.employeeModel;
 import com.employeemanagementbackend.employeemanagementbackend.model.usersModel;
 import com.employeemanagementbackend.employeemanagementbackend.service.UsersService;
@@ -28,13 +29,13 @@ public class userController {
     }
 
     @GetMapping("/users/{id}")
-    public usersModel getUsersById(@PathVariable("id") Long id) {
+    public usersModel getUsersById(@PathVariable("id") Long id) throws UserNotFoundException {
 
         return usersService.getUserById(id);
     }
 
     @DeleteMapping("/users/{id}")
-    public String deleteUsers(@PathVariable("id") Long id) {
+    public String deleteUsers(@PathVariable("id") Long id) throws UserNotFoundException{
 
         return usersService.deleteUsersById(id);
     }

@@ -1,10 +1,13 @@
 package com.employeemanagementbackend.employeemanagementbackend.service;
 
 
+import com.employeemanagementbackend.employeemanagementbackend.exception.UserNotFoundException;
 import com.employeemanagementbackend.employeemanagementbackend.model.usersModel;
 import com.employeemanagementbackend.employeemanagementbackend.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
 
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +22,8 @@ public class UsersService {
 
     public usersModel saveUsers(usersModel users){
 
+
+
         return usersRepository.save(users);
     }
 
@@ -27,7 +32,7 @@ public class UsersService {
         return allUsers;
     }
 
-    public usersModel getUserById(Long id) {
+    public usersModel getUserById(Long id)throws UserNotFoundException {
         Optional<usersModel> users = usersRepository.findById(id);
         if (users.isPresent()) {
             return users.get();
@@ -36,7 +41,7 @@ public class UsersService {
     }
 
 
-    public String deleteUsersById(Long id) {
+    public String deleteUsersById(Long id) throws UserNotFoundException {
         if (usersRepository.findById(id).isPresent()) {
             usersRepository.deleteById(id);
             return "User deleted successfully";

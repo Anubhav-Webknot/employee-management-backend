@@ -1,5 +1,6 @@
 package com.employeemanagementbackend.employeemanagementbackend.service;
 
+import com.employeemanagementbackend.employeemanagementbackend.exception.EmployeeNotFoundException;
 import com.employeemanagementbackend.employeemanagementbackend.model.employeeModel;
 import com.employeemanagementbackend.employeemanagementbackend.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class EmployeeService {
         return allEmployees;
     }
 
-    public employeeModel getEmployeeById(Long id) {
+    public employeeModel getEmployeeById(Long id)throws EmployeeNotFoundException {
         Optional<employeeModel> employee = employeeRepository.findById(id);
         if (employee.isPresent()) {
             return employee.get();
@@ -33,7 +34,7 @@ public class EmployeeService {
         return null;
     }
 
-    public employeeModel updateEmployeeById(Long id, employeeModel employee) {
+    public employeeModel updateEmployeeById(Long id, employeeModel employee) throws EmployeeNotFoundException{
         Optional<employeeModel> employee1 = employeeRepository.findById(id);
 
         if (employee1.isPresent()) {
@@ -56,7 +57,7 @@ public class EmployeeService {
         return null;
     }
 
-    public String deleteDepartmentById(Long id) {
+    public String deleteDepartmentById(Long id) throws EmployeeNotFoundException {
         if (employeeRepository.findById(id).isPresent()) {
             employeeRepository.deleteById(id);
             return "Employee deleted successfully";

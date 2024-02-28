@@ -1,5 +1,6 @@
 package com.employeemanagementbackend.employeemanagementbackend.service;
 
+import com.employeemanagementbackend.employeemanagementbackend.exception.TimesheetNotFoundException;
 import com.employeemanagementbackend.employeemanagementbackend.model.employeeModel;
 import com.employeemanagementbackend.employeemanagementbackend.model.timesheetModel;
 import com.employeemanagementbackend.employeemanagementbackend.model.usersModel;
@@ -18,6 +19,7 @@ public class TimesheetService {
     TimesheetRepository timesheetRepository;
 
     public timesheetModel saveTimesheet(timesheetModel timesheet) {
+
         return timesheetRepository.save(timesheet);
     }
 
@@ -25,7 +27,7 @@ public class TimesheetService {
         return timesheetRepository.findAll();
     }
 
-    public timesheetModel getTimesheetById(Long Id) {
+    public timesheetModel getTimesheetById(Long Id)throws TimesheetNotFoundException {
         Optional<timesheetModel> timesheetRecord = timesheetRepository.findById(Id);
         if (timesheetRecord.isPresent()) {
             return timesheetRecord.get();
@@ -33,7 +35,7 @@ public class TimesheetService {
         return null;
     }
 
-    public timesheetModel updateTimesheetById(Long id, timesheetModel timesheet) {
+    public timesheetModel updateTimesheetById(Long id, timesheetModel timesheet)throws TimesheetNotFoundException {
         Optional<timesheetModel> timesheet1 = timesheetRepository.findById(id);
 
         if (timesheet1.isPresent()) {
@@ -57,7 +59,7 @@ public class TimesheetService {
         return null;
     }
 
-    public String deleteTimesheet(Long Id) {
+    public String deleteTimesheet(Long Id) throws TimesheetNotFoundException{
         Optional<timesheetModel> timesheetRecord = timesheetRepository.findById(Id);
         if(!timesheetRecord.isPresent()){
             return ("Employee with id:"+Id+" not found !!");

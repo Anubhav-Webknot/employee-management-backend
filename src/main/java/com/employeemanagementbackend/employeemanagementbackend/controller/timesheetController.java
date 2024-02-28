@@ -1,5 +1,6 @@
 package com.employeemanagementbackend.employeemanagementbackend.controller;
 
+import com.employeemanagementbackend.employeemanagementbackend.exception.TimesheetNotFoundException;
 import com.employeemanagementbackend.employeemanagementbackend.model.timesheetModel;
 import com.employeemanagementbackend.employeemanagementbackend.service.TimesheetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,17 @@ public class timesheetController {
     }
 
     @GetMapping("/timesheet/{id}")
-    public timesheetModel fetchTimesheetById(@PathVariable Long id)  {
+    public timesheetModel fetchTimesheetById(@PathVariable Long id) throws TimesheetNotFoundException {
         return timesheetService.getTimesheetById(id);
     }
 
     @PutMapping("/timesheet/{id}")
-    public timesheetModel updateTimesheet(@PathVariable("id") Long Id,@RequestBody timesheetModel timesheet)  {
+    public timesheetModel updateTimesheet(@PathVariable("id") Long Id,@RequestBody timesheetModel timesheet) throws TimesheetNotFoundException {
         return timesheetService.updateTimesheetById(Id,timesheet);
     }
 
     @DeleteMapping("/timesheet/{id}")
-    public String deleteTimesheet(@PathVariable Long id){
+    public String deleteTimesheet(@PathVariable Long id)throws TimesheetNotFoundException{
         return timesheetService.deleteTimesheet(id);
     }
 
