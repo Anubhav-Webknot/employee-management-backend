@@ -5,6 +5,7 @@ import com.employeemanagementbackend.employeemanagementbackend.model.employeeMod
 import com.employeemanagementbackend.employeemanagementbackend.model.timesheetModel;
 import com.employeemanagementbackend.employeemanagementbackend.model.usersModel;
 import com.employeemanagementbackend.employeemanagementbackend.repository.TimesheetRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +14,19 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class TimesheetService {
 
     @Autowired
     TimesheetRepository timesheetRepository;
 
     public timesheetModel saveTimesheet(timesheetModel timesheet) {
-
+        log.info("creating new timesheet");
         return timesheetRepository.save(timesheet);
     }
 
     public List<timesheetModel> fetchAllTimesheets() {
+        log.info("Fetching all timesheets");
         return timesheetRepository.findAll();
     }
 
@@ -54,6 +57,7 @@ public class TimesheetService {
             if (Objects.nonNull(timesheet.getDescription()) && !"".equalsIgnoreCase(timesheet.getDescription())) {
                 originalTimesheet.setDescription(timesheet.getDescription());
             }
+            log.info("User updated sucessfully");
             return timesheetRepository.save(originalTimesheet);
         }
         return null;
@@ -65,6 +69,7 @@ public class TimesheetService {
             return ("Employee with id:"+Id+" not found !!");
         }
         timesheetRepository.deleteById(Id);
+        log.info("User deleted sucessfully");
         return "User deleted successfully";
     }
 

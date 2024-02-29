@@ -3,6 +3,7 @@ package com.employeemanagementbackend.employeemanagementbackend.service;
 import com.employeemanagementbackend.employeemanagementbackend.exception.EmployeeNotFoundException;
 import com.employeemanagementbackend.employeemanagementbackend.model.employeeModel;
 import com.employeemanagementbackend.employeemanagementbackend.repository.EmployeeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class EmployeeService {
 
     @Autowired
@@ -18,17 +20,20 @@ public class EmployeeService {
 
 
     public employeeModel saveEmployee(employeeModel employee){
+        log.info("creating new timesheet");
         return employeeRepository.save(employee);
     }
 
     public List<employeeModel> fetchAllEmployees() {
         List<employeeModel> allEmployees = employeeRepository.findAll();
+        log.info("Fetching all employees");
         return allEmployees;
     }
 
     public employeeModel getEmployeeById(Long id)throws EmployeeNotFoundException {
         Optional<employeeModel> employee = employeeRepository.findById(id);
         if (employee.isPresent()) {
+            log.info("Fetching employee with id ",+id);
             return employee.get();
         }
         return null;
@@ -52,6 +57,7 @@ public class EmployeeService {
             if (Objects.nonNull(employee.getEmployeeEmail()) && !"".equalsIgnoreCase(employee.getEmployeeEmail())) {
                 originalEmployee.setEmployeeEmail(employee.getEmployeeEmail());
             }
+            log.info("Updating employee with id ",+id);
             return employeeRepository.save(originalEmployee);
         }
         return null;
@@ -60,6 +66,7 @@ public class EmployeeService {
     public String deleteDepartmentById(Long id) throws EmployeeNotFoundException {
         if (employeeRepository.findById(id).isPresent()) {
             employeeRepository.deleteById(id);
+            log.info("Deleting employee with id ",+id);
             return "Employee deleted successfully";
         }
         return "No such employee in the database";

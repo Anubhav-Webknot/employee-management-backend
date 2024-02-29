@@ -19,6 +19,7 @@ public class userController {
     @PostMapping("/users")
     public usersModel saveUsers(@RequestBody usersModel users)
     {
+
         return usersService.saveUsers(users);
     }
 
@@ -33,6 +34,13 @@ public class userController {
 
         return usersService.getUserById(id);
     }
+
+    @PutMapping("/users/{id}")
+    public usersModel updateUserById(@PathVariable("id") Long id,usersModel user) throws UserNotFoundException {
+
+        return usersService.updateUser(id,user);
+    }
+
 
     @DeleteMapping("/users/{id}")
     public String deleteUsers(@PathVariable("id") Long id) throws UserNotFoundException{
