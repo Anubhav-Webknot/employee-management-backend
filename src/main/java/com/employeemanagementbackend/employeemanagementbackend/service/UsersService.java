@@ -6,6 +6,8 @@ import com.employeemanagementbackend.employeemanagementbackend.model.usersModel;
 import com.employeemanagementbackend.employeemanagementbackend.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -19,13 +21,16 @@ import java.util.Optional;
 
 public class UsersService {
 
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
     @Autowired
     private UsersRepository usersRepository;
 
 
+
     public usersModel saveUsers(usersModel users){
 
-
+//        users.setPassword(this.passwordEncoder.encode(users.getPassword()));
         log.info("creating new user");
         return usersRepository.save(users);
     }
