@@ -2,41 +2,54 @@ package com.employeemanagementbackend.employeemanagementbackend.controller;
 
 
 import com.employeemanagementbackend.employeemanagementbackend.exception.EmployeeNotFoundException;
-import com.employeemanagementbackend.employeemanagementbackend.model.employeeModel;
+import com.employeemanagementbackend.employeemanagementbackend.model.Employee;
 import com.employeemanagementbackend.employeemanagementbackend.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
-public class employeeController {
+public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
     @PostMapping("/employee")
-    public employeeModel saveEmployee(@RequestBody employeeModel employee)
+    public Employee saveEmployee(@RequestBody Employee employee)
     {
         return employeeService.saveEmployee(employee);
     }
 
 
     @GetMapping("/employee")
-    public List<employeeModel> getAllEmployees()throws EmployeeNotFoundException{
+    public List<Employee> getAllEmployees()throws EmployeeNotFoundException{
 
         return employeeService.fetchAllEmployees();
     }
 
+    @GetMapping("/sort-{field}")
+    public List<Employee> getAllEmployeesWithSort(@PathVariable String field)throws EmployeeNotFoundException{
+
+        return employeeService.FindEmployeeWithSorting(field);
+    }
+
+//    @GetMapping("/pagination/{offset}/{pageSize}")
+//    public Page<Employee> getAllEmployeesWithPage(@PathVariable int offset,@PathVariable int pageSize)throws EmployeeNotFoundException{
+//
+//        return employeeService.FindEmployeeWithPagination(offset,pageSize);
+//    }
+
     @GetMapping("/employee/{id}")
-    public employeeModel getEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
+    public Employee getEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
 
         return employeeService.getEmployeeById(id);
     }
 
     @PutMapping("/employee/{id}")
-    public employeeModel updateEmployee(@PathVariable("id") Long id, @RequestBody employeeModel employee)throws EmployeeNotFoundException {
+    public Employee updateEmployee(@PathVariable("id") Long id, @RequestBody Employee employee)throws EmployeeNotFoundException {
         return employeeService.updateEmployeeById(id, employee);
     }
 

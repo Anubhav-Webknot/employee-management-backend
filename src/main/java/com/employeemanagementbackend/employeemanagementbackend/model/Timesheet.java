@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class timesheetModel {
+public class Timesheet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long timesheetId;

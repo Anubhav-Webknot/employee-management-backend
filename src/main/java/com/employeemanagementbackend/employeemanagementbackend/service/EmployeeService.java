@@ -1,10 +1,13 @@
 package com.employeemanagementbackend.employeemanagementbackend.service;
 
 import com.employeemanagementbackend.employeemanagementbackend.exception.EmployeeNotFoundException;
-import com.employeemanagementbackend.employeemanagementbackend.model.employeeModel;
+import com.employeemanagementbackend.employeemanagementbackend.model.Employee;
 import com.employeemanagementbackend.employeemanagementbackend.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,19 +22,29 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
 
-    public employeeModel saveEmployee(employeeModel employee){
+    public Employee saveEmployee(Employee employee){
         log.info("creating new timesheet");
         return employeeRepository.save(employee);
     }
 
-    public List<employeeModel> fetchAllEmployees() {
-        List<employeeModel> allEmployees = employeeRepository.findAll();
+    public List<Employee> fetchAllEmployees() {
+        List<Employee> allEmployees = employeeRepository.findAll();
         log.info("Fetching all employees");
         return allEmployees;
     }
 
-    public employeeModel getEmployeeById(Long id)throws EmployeeNotFoundException {
-        Optional<employeeModel> employee = employeeRepository.findById(id);
+    public List<Employee>FindEmployeeWithSorting(String field)
+    {
+        return employeeRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+    }
+
+//    public Page<Employee>FindEmployeeWithPagination(int offset,int pageSize)
+//    {
+//       return employeeRepository.findAll(PageRequest.of(offset,pageSize));
+//    }
+
+    public Employee getEmployeeById(Long id)throws EmployeeNotFoundException {
+        Optional<Employee> employee = employeeRepository.findById(id);
         if (employee.isPresent()) {
             log.info("Fetching employee with id ",+id);
             return employee.get();
@@ -39,11 +52,11 @@ public class EmployeeService {
         return null;
     }
 
-    public employeeModel updateEmployeeById(Long id, employeeModel employee) throws EmployeeNotFoundException{
-        Optional<employeeModel> employee1 = employeeRepository.findById(id);
+    public Employee updateEmployeeById(Long id, Employee employee) throws EmployeeNotFoundException{
+        Optional<Employee> employee1 = employeeRepository.findById(id);
 
         if (employee1.isPresent()) {
-            employeeModel originalEmployee = employee1.get();
+            Employee originalEmployee = employee1.get();
 
             if (Objects.nonNull(employee.getEmployeeName()) && !"".equalsIgnoreCase(employee.getEmployeeName())) {
                 originalEmployee.setEmployeeName(employee.getEmployeeName());

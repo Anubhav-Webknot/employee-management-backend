@@ -2,7 +2,7 @@ package com.employeemanagementbackend.employeemanagementbackend.service;
 
 
 import com.employeemanagementbackend.employeemanagementbackend.exception.UserNotFoundException;
-import com.employeemanagementbackend.employeemanagementbackend.model.usersModel;
+import com.employeemanagementbackend.employeemanagementbackend.model.Users;
 import com.employeemanagementbackend.employeemanagementbackend.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,27 +28,27 @@ public class UsersService {
 
 
 
-    public usersModel saveUsers(usersModel users){
+    public Users saveUsers(Users users){
 
 //        users.setPassword(this.passwordEncoder.encode(users.getPassword()));
         log.info("creating new user");
         return usersRepository.save(users);
     }
 
-    public List<usersModel> fetchAllUsers(){
-        List<usersModel> allUsers = usersRepository.findAll();
+    public List<Users> fetchAllUsers(){
+        List<Users> allUsers = usersRepository.findAll();
         log.info("Fetched User list");
         return allUsers;
     }
 
-    public usersModel updateUser(Long id, usersModel user) throws UserNotFoundException {
-        Optional<usersModel> isExisting = usersRepository.findById(id);
+    public Users updateUser(Long id, Users user) throws UserNotFoundException {
+        Optional<Users> isExisting = usersRepository.findById(id);
 
         if (!isExisting.isPresent()) {
             throw new UserNotFoundException("Employee not found");
         }
 
-        usersModel userDB = isExisting.get();
+        Users userDB = isExisting.get();
 
         if(Objects.nonNull(user.getUserName()) &&
                 !"".equalsIgnoreCase(user.getUserName())) {
@@ -59,11 +59,11 @@ public class UsersService {
             userDB.setPassword(user.getPassword());
         }
         log.info("User updated successfullly");
-        return (usersModel) usersRepository.save(userDB);
+        return (Users) usersRepository.save(userDB);
     }
 
-    public usersModel getUserById(Long id)throws UserNotFoundException {
-        Optional<usersModel> users = usersRepository.findById(id);
+    public Users getUserById(Long id)throws UserNotFoundException {
+        Optional<Users> users = usersRepository.findById(id);
         if (users.isPresent()) {
             log.info("Successfully Fetched User with given id");
             return users.get();

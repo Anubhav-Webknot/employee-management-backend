@@ -9,12 +9,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
+
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class employeeModel {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,5 +29,13 @@ public class employeeModel {
     private String employeePhone;
 
     private String employeeEmail;
+
+    private String employeeDepartment;
+
+    private Date joiningDate;
+
+    private Date leavingDate;
+
+    private Double salary;
 
 }

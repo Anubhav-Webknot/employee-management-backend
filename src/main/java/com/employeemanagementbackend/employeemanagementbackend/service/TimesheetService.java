@@ -1,9 +1,7 @@
 package com.employeemanagementbackend.employeemanagementbackend.service;
 
 import com.employeemanagementbackend.employeemanagementbackend.exception.TimesheetNotFoundException;
-import com.employeemanagementbackend.employeemanagementbackend.model.employeeModel;
-import com.employeemanagementbackend.employeemanagementbackend.model.timesheetModel;
-import com.employeemanagementbackend.employeemanagementbackend.model.usersModel;
+import com.employeemanagementbackend.employeemanagementbackend.model.Timesheet;
 import com.employeemanagementbackend.employeemanagementbackend.repository.TimesheetRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +18,29 @@ public class TimesheetService {
     @Autowired
     TimesheetRepository timesheetRepository;
 
-    public timesheetModel saveTimesheet(timesheetModel timesheet) {
+    public Timesheet saveTimesheet(Timesheet timesheet) {
         log.info("creating new timesheet");
         return timesheetRepository.save(timesheet);
     }
 
-    public List<timesheetModel> fetchAllTimesheets() {
+    public List<Timesheet> fetchAllTimesheets() {
         log.info("Fetching all timesheets");
         return timesheetRepository.findAll();
     }
 
-    public timesheetModel getTimesheetById(Long Id)throws TimesheetNotFoundException {
-        Optional<timesheetModel> timesheetRecord = timesheetRepository.findById(Id);
+    public Timesheet getTimesheetById(Long Id)throws TimesheetNotFoundException {
+        Optional<Timesheet> timesheetRecord = timesheetRepository.findById(Id);
         if (timesheetRecord.isPresent()) {
             return timesheetRecord.get();
         }
         return null;
     }
 
-    public timesheetModel updateTimesheetById(Long id, timesheetModel timesheet)throws TimesheetNotFoundException {
-        Optional<timesheetModel> timesheet1 = timesheetRepository.findById(id);
+    public Timesheet updateTimesheetById(Long id, Timesheet timesheet)throws TimesheetNotFoundException {
+        Optional<Timesheet> timesheet1 = timesheetRepository.findById(id);
 
         if (timesheet1.isPresent()) {
-            timesheetModel originalTimesheet = timesheet1.get();
+            Timesheet originalTimesheet = timesheet1.get();
 
             if (Objects.nonNull(timesheet.getProjectName()) && !"".equalsIgnoreCase(timesheet.getProjectName())) {
                 originalTimesheet.setProjectName(timesheet.getProjectName());
@@ -64,7 +62,7 @@ public class TimesheetService {
     }
 
     public String deleteTimesheet(Long Id) throws TimesheetNotFoundException{
-        Optional<timesheetModel> timesheetRecord = timesheetRepository.findById(Id);
+        Optional<Timesheet> timesheetRecord = timesheetRepository.findById(Id);
         if(!timesheetRecord.isPresent()){
             return ("Employee with id:"+Id+" not found !!");
         }
