@@ -36,11 +36,11 @@ public class EmployeeController {
         return employeeService.FindEmployeeWithSorting(field);
     }
 
-//    @GetMapping("/pagination/{offset}/{pageSize}")
-//    public Page<Employee> getAllEmployeesWithPage(@PathVariable int offset,@PathVariable int pageSize)throws EmployeeNotFoundException{
-//
-//        return employeeService.FindEmployeeWithPagination(offset,pageSize);
-//    }
+    @GetMapping("/employee-pagination/{offset}/{pageSize}")
+    public Page<Employee> getAllEmployeesWithSort(@PathVariable int offset,@PathVariable int pageSize)throws EmployeeNotFoundException{
+
+        return employeeService.findEmployeeWithPagination(offset,pageSize);
+    }
 
     @GetMapping("/employee/{id}")
     public Employee getEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {

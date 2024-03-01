@@ -2,12 +2,19 @@ package com.employeemanagementbackend.employeemanagementbackend.service;
 
 
 import com.employeemanagementbackend.employeemanagementbackend.exception.UserNotFoundException;
+import com.employeemanagementbackend.employeemanagementbackend.model.Employee;
 import com.employeemanagementbackend.employeemanagementbackend.model.Users;
 import com.employeemanagementbackend.employeemanagementbackend.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 //import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -18,7 +25,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-
+@CacheConfig(cacheNames = {"User"})
 public class UsersService {
 
 //    @Autowired
@@ -27,7 +34,7 @@ public class UsersService {
     private UsersRepository usersRepository;
 
 
-
+    @CacheEvict(value = "user", allEntries = true)
     public Users saveUsers(Users users){
 
 //        users.setPassword(this.passwordEncoder.encode(users.getPassword()));
@@ -35,12 +42,25 @@ public class UsersService {
         return usersRepository.save(users);
     }
 
+    @Cacheable("User")
     public List<Users> fetchAllUsers(){
         List<Users> allUsers = usersRepository.findAll();
         log.info("Fetched User list");
         return allUsers;
     }
 
+    public List<Users>FindUsersWithSorting(String field)
+    {
+        return usersRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+    }
+
+    public Page<Users> findUsersWithPagination(int offset, int pageSize)
+    {
+        return usersRepository.findAll(PageRequest.of(offset,pageSize));
+    }
+
+    @CacheEvict(value = "user",key="#id")
+    // @CachePut(value = "blogs", key = "#id")
     public Users updateUser(Long id, Users user) throws UserNotFoundException {
         Optional<Users> isExisting = usersRepository.findById(id);
 
@@ -62,6 +82,7 @@ public class UsersService {
         return (Users) usersRepository.save(userDB);
     }
 
+    @Cacheable(value = "user" , key="#id")
     public Users getUserById(Long id)throws UserNotFoundException {
         Optional<Users> users = usersRepository.findById(id);
         if (users.isPresent()) {
@@ -72,6 +93,7 @@ public class UsersService {
     }
 
 
+    @CacheEvict(value = "user",allEntries = true)
     public String deleteUsersById(Long id) throws UserNotFoundException {
         if (usersRepository.findById(id).isPresent()) {
             usersRepository.deleteById(id);

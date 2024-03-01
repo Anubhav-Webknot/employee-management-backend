@@ -5,6 +5,9 @@ import com.employeemanagementbackend.employeemanagementbackend.model.Employee;
 import com.employeemanagementbackend.employeemanagementbackend.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,17 +19,19 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@CacheConfig(cacheNames = {"Employee"})
 public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-
+    @CacheEvict(value = "employee", allEntries = true)
     public Employee saveEmployee(Employee employee){
         log.info("creating new timesheet");
         return employeeRepository.save(employee);
     }
 
+    @Cacheable("Employee")
     public List<Employee> fetchAllEmployees() {
         List<Employee> allEmployees = employeeRepository.findAll();
         log.info("Fetching all employees");
@@ -38,11 +43,11 @@ public class EmployeeService {
         return employeeRepository.findAll(Sort.by(Sort.Direction.ASC,field));
     }
 
-//    public Page<Employee>FindEmployeeWithPagination(int offset,int pageSize)
-//    {
-//       return employeeRepository.findAll(PageRequest.of(offset,pageSize));
-//    }
-
+    public Page<Employee>findEmployeeWithPagination(int offset,int pageSize)
+    {
+       return employeeRepository.findAll(PageRequest.of(offset,pageSize));
+    }
+    @Cacheable(value = "employee" , key="#id")
     public Employee getEmployeeById(Long id)throws EmployeeNotFoundException {
         Optional<Employee> employee = employeeRepository.findById(id);
         if (employee.isPresent()) {
@@ -52,6 +57,8 @@ public class EmployeeService {
         return null;
     }
 
+    @CacheEvict(value = "employee",key="#id")
+    // @CachePut(value = "blogs", key = "#id")
     public Employee updateEmployeeById(Long id, Employee employee) throws EmployeeNotFoundException{
         Optional<Employee> employee1 = employeeRepository.findById(id);
 
@@ -76,6 +83,7 @@ public class EmployeeService {
         return null;
     }
 
+    @CacheEvict(value = "employee",allEntries = true)
     public String deleteDepartmentById(Long id) throws EmployeeNotFoundException {
         if (employeeRepository.findById(id).isPresent()) {
             employeeRepository.deleteById(id);
