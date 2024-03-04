@@ -43,7 +43,7 @@ public class UserController {
         return usersService.updateUser(id,user);
     }
 
-    @GetMapping("/sort-{field}")
+    @GetMapping("/user-sort-{field}")
     public List<Users> getAllUsersWithSort(@PathVariable String field)throws UserNotFoundException {
 
         return usersService.FindUsersWithSorting(field);
