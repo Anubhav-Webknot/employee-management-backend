@@ -30,7 +30,7 @@ public class EmployeeController {
         return employeeService.fetchAllEmployees();
     }
 
-    @GetMapping("/sort-{field}")
+    @GetMapping("/employee-sort-{field}")
     public List<Employee> getAllEmployeesWithSort(@PathVariable String field)throws EmployeeNotFoundException{
 
         return employeeService.FindEmployeeWithSorting(field);

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
@@ -16,7 +17,9 @@ import java.sql.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Employee {
+
+public class Employee implements Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -39,7 +39,7 @@ public class TimesheetController {
         return timesheetService.updateTimesheetById(Id, timesheet);
     }
 
-    @GetMapping("/sort-{field}")
+    @GetMapping("/timesheet-sort-{field}")
     public List<Timesheet> getAllTimesheetWithSort(@PathVariable String field) throws EmployeeNotFoundException {
 
         return timesheetService.FindTimesheetWithSorting(field);
